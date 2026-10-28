@@ -1,0 +1,63 @@
+<View id="1" did="0" type="FrameLayout">
+<ppt>width=-1
+height=-1
+backgroundcolor=#141218</ppt>
+<event></event>
+</View>
+<View id="2" did="1" type="ScrollView">
+<ppt>width=165dp
+height=165dp
+scrollbars=none
+overScrollMode=never
+backgroundcolor=#141218</ppt>
+<event></event>
+</View>
+<View id="3" did="2" type="LinearLayout">
+<ppt>width=-1
+height=-2
+orientation=vertical</ppt>
+<event></event>
+</View>
+<View id="4" did="1" type="TextView">
+<ppt>width=110dp
+height=-2
+text=青简
+textsize=9sp
+textcolor=#D0BCFF
+singleLine=true
+gravity=center</ppt>
+<event></event>
+</View>
+<View id="5" did="3" type="LinearLayout">
+<ppt>width=-1
+height=-2
+orientation=vertical</ppt>
+<event></event>
+</View>
+<View id="6" did="3" type="TextView">
+<ppt>width=-2
+height=-2
+text=阅读记录
+textsize=8sp
+textcolor=#938F99
+layout_margintop=12dp
+visibility=gone</ppt>
+<event></event>
+</View>
+<View id="7" did="3" type="LinearLayout">
+<ppt>width=-1
+height=-2
+orientation=vertical
+visibility=gone</ppt>
+<event></event>
+</View>
+<View id="8" did="3" type="TextView">
+<ppt>width=-2
+height=-2
+text=
+textsize=8sp
+textcolor=#6F6B75
+layout_margintop=8dp</ppt>
+<event></event>
+</View>
+<UIEventset><eventItme type="loading">call(null, "mjava", "watch_home.boot")</eventItme><eventItme type="resume">call(null, "mjava", "watch_home.resume")</eventItme></UIEventset>

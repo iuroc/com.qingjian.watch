@@ -1,0 +1,56 @@
+// 首页：两个分类色块 + 阅读记录
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+import org.json.JSONObject;
+
+public void boot() {
+    i.fn("qj_store");
+    i.fn("watch_ui");
+    i.fn("watch_nav");
+    place(2);
+    topTitle(4);
+    pad(3, 2, 2, 2, 2);
+    build();
+    resume();
+    nav();
+}
+
+public void build() {
+    i.fn("watch_ui");
+    clear(5);
+    block(5, "图书分类", "cats:ebook", "#4A4458");
+    block(5, "期刊分类", "cats:mag", "#3D4F5C");
+}
+
+public void resume() {
+    i.fn("qj_store");
+    i.fn("watch_ui");
+    TextView label = (TextView) activity.findViewById(6);
+    clear(7);
+    ArrayList hist = store_history();
+    if (hist == null || hist.size() == 0) {
+        label.setVisibility(View.GONE);
+        activity.findViewById(7).setVisibility(View.GONE);
+        return;
+    }
+    label.setVisibility(View.VISIBLE);
+    activity.findViewById(7).setVisibility(View.VISIBLE);
+    int max = hist.size();
+    if (max > 5) max = 5;
+    for (int k = 0; k < max; k++) {
+        String line = (String) hist.get(k);
+        try {
+            JSONObject o = new JSONObject(line);
+            String sub = "第 " + o.optInt("page", 1) + " / " + o.optInt("total", 0) + " 页";
+            rowSz(7, o.optString("title", "未命名"), sub, "resume:" + line, 11);
+        } catch (Throwable t) {
+        }
+    }
+    nav();
+}
+
+public void nav() {
+    i.fn("watch_nav");
+    bindAll(1);
+}

@@ -1,0 +1,64 @@
+<View id="1" did="0" type="FrameLayout">
+<ppt>width=-1
+height=-1
+backgroundcolor=#141218</ppt>
+<event></event>
+</View>
+<View id="2" did="1" type="ScrollView">
+<ppt>width=165dp
+height=165dp
+scrollbars=none
+overScrollMode=never
+backgroundcolor=#141218</ppt>
+<event></event>
+</View>
+<View id="3" did="2" type="LinearLayout">
+<ppt>width=-1
+height=-2
+orientation=vertical</ppt>
+<event></event>
+</View>
+<View id="4" did="3" type="TextView">
+<ppt>width=-1
+height=-2
+text=
+textsize=14sp
+textcolor=#E6E0E9</ppt>
+<event></event>
+</View>
+<View id="5" did="3" type="TextView">
+<ppt>width=-1
+height=-2
+text=
+textsize=12sp
+textcolor=#938F99
+layout_margintop=4dp</ppt>
+<event></event>
+</View>
+<View id="6" did="3" type="TextView">
+<ppt>width=-1
+height=-2
+text=
+textsize=13sp
+textcolor=#CAC4D0
+lineSpacingExtra=2dp
+layout_margintop=8dp</ppt>
+<event></event>
+</View>
+<View id="7" did="3" type="LinearLayout">
+<ppt>width=-1
+height=-2
+orientation=vertical</ppt>
+<event></event>
+</View>
+<View id="8" did="1" type="TextView">
+<ppt>width=110dp
+height=-2
+text=图书详情
+textsize=9sp
+textcolor=#938F99
+singleLine=true
+gravity=center</ppt>
+<event></event>
+</View>
+<UIEventset><eventItme type="loading">call(null, "mjava", "watch_detail.boot")</eventItme></UIEventset>

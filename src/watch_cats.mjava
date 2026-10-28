@@ -1,0 +1,38 @@
+// 分类页：按 kind 列出分类入口
+import android.util.Log;
+import android.widget.LinearLayout;
+
+public void boot() {
+    i.fn("watch_ui");
+    i.fn("watch_nav");
+    place(2);
+    topTitle(4);
+    pad(3, 2, 2, 2, 2);
+    String kind = s(i.sss("wv.kind"));
+    title(4, "mag".equals(kind) ? "期刊分类" : "图书分类");
+    String[] names = catNames(kind);
+    int[] ids = catIds(kind);
+    clear(5);
+    LinearLayout row = null;
+    for (int k = 0; k < names.length; k++) {
+        if (k % 2 == 0) row = gridRow(5);
+        cell(row, names[k], "list:" + ids[k] + ":" + names[k]);
+        if (k == names.length - 1 && names.length % 2 == 1) spacer(row);
+    }
+    bindAll(1);
+}
+
+public String[] catNames(String kind) {
+    if ("mag".equals(kind)) {
+        return new String[]{"精品推荐", "时政军事", "文学艺术", "时尚生活", "财经管理", "文化综合", "其它"};
+    }
+    return new String[]{"诗歌散文", "小说传记", "科学技术", "国学经典", "历史文化",
+                        "社会科学", "心理成长", "艺术审美", "哲学宗教", "教育研究", "家长尊享"};
+}
+
+public int[] catIds(String kind) {
+    if ("mag".equals(kind)) {
+        return new int[]{6, 3, 4, 5, 8, 9, 10};
+    }
+    return new int[]{124, 125, 126, 127, 128, 129, 130, 131, 132, 140, 141};
+}

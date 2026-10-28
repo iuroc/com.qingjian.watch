@@ -1,0 +1,33 @@
+// 目录页：章节列表，点击跳页
+import android.util.Log;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+public void boot() {
+    i.fn("watch_ui");
+    i.fn("watch_nav");
+    place(2);
+    topTitle(4);
+    pad(3, 2, 2, 2, 2);
+    clear(5);
+    String js = s(i.sss("qw.catalogs"));
+    int count = 0;
+    try {
+        JSONArray arr = new JSONArray(js);
+        for (int k = 0; k < arr.length(); k++) {
+            JSONObject o = arr.optJSONObject(k);
+            if (o == null) continue;
+            String t = o.optString("title");
+            int p = o.optInt("page", 0);
+            if (t == null || t.length() == 0) continue;
+            rowSz(5, t, "第 " + p + " 页", "toc:" + p, 11);
+            count++;
+        }
+    } catch (Throwable t) {
+        Log.i("qjwatch", "toc fail " + t);
+    }
+    if (count == 0) {
+        row(5, "没有目录", "", "noop");
+    }
+    bindAll(1);
+}

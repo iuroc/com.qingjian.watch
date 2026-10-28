@@ -1,0 +1,69 @@
+<View id="1" did="0" type="FrameLayout">
+<ppt>width=-1
+height=-1
+backgroundcolor=#141218</ppt>
+<event></event>
+</View>
+<View id="2" did="1" type="WebView">
+<ppt>width=165dp
+height=165dp</ppt>
+<event></event>
+</View>
+<View id="3" did="1" type="TextView">
+<ppt>width=104dp
+height=-2
+text=
+textsize=9sp
+textcolor=#938F99
+singleLine=true
+ellipsize=end
+gravity=center</ppt>
+<event></event>
+</View>
+<View id="4" did="1" type="TextView">
+<ppt>width=30dp
+height=60dp
+text=‹
+textsize=20sp
+textcolor=#D0BCFF
+gravity=center</ppt>
+<event></event>
+</View>
+<View id="5" did="1" type="TextView">
+<ppt>width=30dp
+height=60dp
+text=›
+textsize=20sp
+textcolor=#D0BCFF
+gravity=center</ppt>
+<event></event>
+</View>
+<View id="6" did="1" type="LinearLayout">
+<ppt>width=-2
+height=-2
+orientation=horizontal
+gravity=center_vertical</ppt>
+<event></event>
+</View>
+<View id="7" did="6" type="TextView">
+<ppt>width=-2
+height=-2
+text=菜单
+textsize=11sp
+textcolor=#CAC4D0
+paddingleft=10dp
+paddingright=10dp
+paddingtop=6dp
+paddingbottom=6dp</ppt>
+<event></event>
+</View>
+<View id="8" did="6" type="TextView">
+<ppt>width=-2
+height=-2
+text=1 / 1
+textsize=9sp
+textcolor=#6F6B75
+layout_marginleft=6dp</ppt>
+<event></event>
+</View>
+<UIEventset><eventItme type="loading">call(null, "mjava", "watch_reader.boot")</eventItme><eventItme type="resume">call(null, "mjava", "watch_reader.resume")</eventItme><eventItme type="downkey">call(null, "mjava", "watch_reader.key", "R", st_kC)</eventItme></UIEventset>

@@ -1,0 +1,50 @@
+// 阅读菜单页：MD3 描边按钮，可滚动
+import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+
+public void boot() {
+    i.fn("watch_ui");
+    i.fn("watch_nav");
+    place(2);
+    topTitle(4);
+    pad(3, 2, 2, 2, 2);
+    clear(3);
+    item("上一页", "-1");
+    item("下一页", "1");
+    item("目录", "tocpage");
+    item("继续阅读", "0");
+    item("关闭阅读器", "q");
+    bindAll(1);
+}
+
+public void item(String text, String tag) {
+    TextView b = button(3, text, tag, false);
+    b.setOnClickListener(new View.OnClickListener() {
+        public void onClick(View v) {
+            go((String) v.getTag());
+        }
+    });
+}
+
+public void go(String p) {
+    Log.i("qjwatch", "menu go " + p);
+    if ("tocpage".equals(p)) {
+        i.uigo("toc.iyu");
+        return;
+    }
+    if ("q".equals(p)) {
+        i.sss("qw.quit", "1");
+        activity.finish();
+        return;
+    }
+    i.sss("qw.pending", p);
+    activity.finish();
+}
+
+public void resume() {
+    if ("1".equals(i.sss("qw.menuclose"))) {
+        i.sss("qw.menuclose", "0");
+        activity.finish();
+    }
+}

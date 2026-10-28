@@ -1,0 +1,39 @@
+<View id="1" did="0" type="FrameLayout">
+<ppt>width=-1
+height=-1
+backgroundcolor=#141218</ppt>
+<event></event>
+</View>
+<View id="2" did="1" type="ScrollView">
+<ppt>width=165dp
+height=165dp
+scrollbars=none
+overScrollMode=never
+backgroundcolor=#141218</ppt>
+<event></event>
+</View>
+<View id="3" did="2" type="LinearLayout">
+<ppt>width=-1
+height=-2
+orientation=vertical</ppt>
+<event></event>
+</View>
+<View id="4" did="1" type="TextView">
+<ppt>width=110dp
+height=-2
+text=期次
+textsize=9sp
+textcolor=#938F99
+singleLine=true
+ellipsize=end
+gravity=center</ppt>
+<event></event>
+</View>
+<View id="5" did="3" type="LinearLayout">
+<ppt>width=-1
+height=-2
+orientation=vertical
+layout_margintop=4dp</ppt>
+<event></event>
+</View>
+<UIEventset><eventItme type="loading">call(null, "mjava", "watch_issues.boot")</eventItme></UIEventset>

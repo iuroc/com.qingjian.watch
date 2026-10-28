@@ -1,0 +1,33 @@
+// 详情页：标题/作者/简介 + MD3 主按钮
+import android.util.Log;
+import org.json.JSONObject;
+
+public void boot() {
+    i.fn("watch_ui");
+    i.fn("watch_nav");
+    place(2);
+    pad(3, 2, 2, 2, 2);
+    String itemJson = (String) i.sss("qj.item");
+    String titleText = "";
+    String author = "";
+    String summary = "";
+    String type = "ebook";
+    try {
+        JSONObject o = new JSONObject(itemJson);
+        titleText = o.optString("title");
+        author = o.optString("author");
+        summary = o.optString("summary");
+        type = o.optString("type", "ebook");
+    } catch (Throwable t) {
+    }
+    title(4, titleText);
+    title(5, author);
+    title(6, summary);
+    boolean mag = "magazine".equals(type);
+    topTitle(8);
+    title(8, mag ? "期刊详情" : "图书详情");
+    clear(7);
+    button(7, mag ? "选择期次" : "开始阅读",
+           mag ? ("issues:" + itemJson) : ("read:" + itemJson), true);
+    bindAll(1);
+}

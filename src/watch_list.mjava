@@ -1,0 +1,115 @@
+// 分类下的书刊列表，底部 MD3 按钮「加载更多」
+import android.graphics.Color;
+import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+public void boot() {
+    i.fn("qj_core");
+    i.fn("watch_ui");
+    i.fn("watch_nav");
+    place(2);
+    topTitle(4);
+    pad(3, 2, 2, 2, 2);
+    title(4, s(i.sss("wv.catname")));
+    i.sss("wl.page", Integer.valueOf(0));
+    clear(5);
+    clear(6);
+    TextView more = button(6, "加载更多", "", true);
+    more.setOnClickListener(new View.OnClickListener() {
+        public void onClick(View v) {
+            more();
+        }
+    });
+    foot(View.GONE);
+    more();
+    bindAll(1);
+}
+
+public TextView btn() {
+    View box = activity.findViewById(6);
+    if (box == null) return null;
+    try {
+        return (TextView) ((LinearLayout) box).getChildAt(0);
+    } catch (Throwable t) {
+        return null;
+    }
+}
+
+public void setBtnBusy(boolean busy) {
+    i.fn("watch_ui");
+    TextView b = btn();
+    if (b == null) return;
+    if (busy) {
+        b.setText("加载中…");
+        b.setBackground(null);
+        b.setTextColor(Color.parseColor("#6F6B75"));
+        b.setClickable(false);
+    } else {
+        b.setText("加载更多");
+        b.setBackground(filledBg());
+        b.setTextColor(Color.parseColor("#EADDFF"));
+        b.setClickable(true);
+    }
+}
+
+public void foot(int vis) {
+    View f = activity.findViewById(6);
+    if (f != null) f.setVisibility(vis);
+}
+
+public void more() {
+    i.fn("qj_core");
+    int page = toInt(i.sss("wl.page"), 0) + 1;
+    i.sss("wl.page", Integer.valueOf(page));
+    foot(View.VISIBLE);
+    setBtnBusy(true);
+    new Thread(new Runnable() {
+        public void run() {
+            i.fn("qj_core");
+            String kind = s(i.sss("wv.kind"));
+            int cat = toInt(i.sss("wv.cat"), 124);
+            ArrayList list;
+            if ("mag".equals(kind)) {
+                list = core_magazines(cat, page, 20);
+            } else {
+                list = core_books(cat, page, 20);
+            }
+            activity.runOnUiThread(new Runnable() {
+                public void run() {
+                    render(list);
+                }
+            });
+        }
+    }).start();
+}
+
+public void render(ArrayList list) {
+    i.fn("watch_ui");
+    i.fn("watch_nav");
+    if (list == null || list.size() == 0) {
+        foot(View.GONE);
+        if (toInt(i.sss("wl.page"), 0) <= 1) {
+            row(5, "没有更多内容", "", "noop");
+        }
+        bindAll(1);
+        return;
+    }
+    for (int k = 0; k < list.size(); k++) {
+        HashMap item = (HashMap) list.get(k);
+        String json = json(item);
+        String sub = s(item.get("author"));
+        if ("magazine".equals(s(item.get("type")))) {
+            sub = "期刊 · " + s(item.get("author"));
+        }
+        rowSz(5, s(item.get("title")), sub, "detail:" + json, 12);
+    }
+    if (list.size() < 20) {
+        foot(View.GONE);
+    } else {
+        setBtnBusy(false);
+        foot(View.VISIBLE);
+    }
+    bindAll(1);
+}

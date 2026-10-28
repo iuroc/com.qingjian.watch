@@ -1,0 +1,273 @@
+// 手表版公共 UI：圆屏摆放、列表行、点击分发
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import org.json.JSONObject;
+
+public int dp(float v) {
+    return (int) (v * activity.getResources().getDisplayMetrics().density);
+}
+
+public String s(Object o) {
+    return o == null ? "" : String.valueOf(o);
+}
+
+// 内容收进圆屏内接方框并居中
+public void place(int id) {
+    FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(dp(165), dp(165));
+    lp.gravity = Gravity.CENTER;
+    View v = activity.findViewById(id);
+    if (v != null) v.setLayoutParams(lp);
+}
+
+public void pad(int id, int l, int t, int r, int b) {
+    View v = activity.findViewById(id);
+    if (v != null) v.setPadding(dp(l), dp(t), dp(r), dp(b));
+}
+
+public void title(int id, String text) {
+    TextView tv = (TextView) activity.findViewById(id);
+    if (tv != null) tv.setText(text);
+}
+
+public void row(int boxId, String main, String sub, String tag) {
+    rowSz(boxId, main, sub, tag, 10);
+}
+
+public void rowSz(int boxId, String main, String sub, String tag, int size) {
+    TextView tv = new TextView(activity);
+    String t = main == null ? "" : main;
+    if (sub != null && sub.length() > 0) t = t + "\n" + sub;
+    tv.setText(t);
+    tv.setTextSize(size);
+    tv.setTextColor(Color.parseColor("#E6E0E9"));
+    tv.setLineSpacing(0, 1.2f);
+    tv.setPadding(0, dp(7), 0, dp(7));
+    tv.setTag(tag);
+    tv.setOnClickListener(new View.OnClickListener() {
+        public void onClick(View v) {
+            tap((String) v.getTag());
+        }
+    });
+    View box = activity.findViewById(boxId);
+    if (box instanceof LinearLayout) ((LinearLayout) box).addView(tv);
+}
+
+public void rowBig(int boxId, String main, String sub, String tag) {
+    row(boxId, main, sub, tag);
+    LinearLayout box = (LinearLayout) activity.findViewById(boxId);
+    TextView tv = (TextView) box.getChildAt(box.getChildCount() - 1);
+    tv.setTextSize(12);
+    tv.setPadding(0, dp(10), 0, dp(10));
+}
+
+public GradientDrawable filledBg() {
+    GradientDrawable bg = new GradientDrawable();
+    bg.setColor(Color.parseColor("#4A4458"));
+    bg.setCornerRadius(dp(10));
+    return bg;
+}
+
+public GradientDrawable outlineBg() {
+    GradientDrawable bg = new GradientDrawable();
+    bg.setColor(Color.parseColor("#00000000"));
+    bg.setCornerRadius(dp(10));
+    bg.setStroke(dp(1), Color.parseColor("#4A4458"));
+    return bg;
+}
+
+public void button(int boxId, String text, String tag) {
+    button(boxId, text, tag, false);
+}
+
+// 全局统一按钮：filled=实心，否则空心描边（纯 TextView，零 MD3 依赖）
+public TextView button(int boxId, String text, String tag, boolean filled) {
+    TextView tv = new TextView(activity);
+    tv.setText(text);
+    tv.setTextSize(12);
+    tv.setGravity(Gravity.CENTER);
+    tv.setPadding(dp(6), dp(10), dp(6), dp(10));
+    GradientDrawable bg = new GradientDrawable();
+    bg.setCornerRadius(dp(10));
+    if (filled) {
+        bg.setColor(Color.parseColor("#4A4458"));
+        tv.setTextColor(Color.parseColor("#EADDFF"));
+    } else {
+        bg.setColor(Color.parseColor("#00000000"));
+        bg.setStroke(dp(1), Color.parseColor("#4A4458"));
+        tv.setTextColor(Color.parseColor("#E6E0E9"));
+    }
+    tv.setBackground(bg);
+    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
+    lp.topMargin = dp(4);
+    tv.setLayoutParams(lp);
+    tv.setTag(tag);
+    tv.setOnClickListener(new View.OnClickListener() {
+        public void onClick(View v) {
+            tap((String) v.getTag());
+        }
+    });
+    View box = activity.findViewById(boxId);
+    if (box instanceof LinearLayout) ((LinearLayout) box).addView(tv);
+    return tv;
+}
+
+// 两列网格：返回一行横向容器
+public LinearLayout gridRow(int boxId) {
+    LinearLayout row = new LinearLayout(activity);
+    row.setOrientation(LinearLayout.HORIZONTAL);
+    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, -2);
+    lp.topMargin = dp(3);
+    row.setLayoutParams(lp);
+    View box = activity.findViewById(boxId);
+    if (box instanceof LinearLayout) ((LinearLayout) box).addView(row);
+    return row;
+}
+
+// 网格单元：实心按钮，等宽
+public TextView cell(LinearLayout row, String text, String tag) {
+    TextView tv = new TextView(activity);
+    tv.setText(text);
+    tv.setTextSize(13);
+    tv.setGravity(Gravity.CENTER);
+    tv.setPadding(dp(4), dp(11), dp(4), dp(11));
+    tv.setBackground(filledBg());
+    tv.setTextColor(Color.parseColor("#EADDFF"));
+    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, -2, 1.0f);
+    lp.leftMargin = dp(2);
+    lp.rightMargin = dp(2);
+    tv.setLayoutParams(lp);
+    tv.setTag(tag);
+    tv.setOnClickListener(new View.OnClickListener() {
+        public void onClick(View v) {
+            tap((String) v.getTag());
+        }
+    });
+    row.addView(tv);
+    return tv;
+}
+
+public void spacer(LinearLayout row) {
+    View v = new View(activity);
+    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(0, dp(1), 1.0f);
+    lp.leftMargin = dp(2);
+    lp.rightMargin = dp(2);
+    v.setLayoutParams(lp);
+    row.addView(v);
+}
+
+// 首页分类色块
+public void block(int boxId, String text, String tag, String colorHex) {
+    TextView tv = new TextView(activity);
+    tv.setText(text);
+    tv.setTextSize(15);
+    tv.setTextColor(Color.parseColor("#FFFFFF"));
+    tv.setGravity(Gravity.CENTER);
+    GradientDrawable bg = new GradientDrawable();
+    bg.setColor(Color.parseColor(colorHex));
+    bg.setCornerRadius(dp(8));
+    tv.setBackground(bg);
+    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(-1, dp(46));
+    lp.topMargin = dp(3);
+    tv.setLayoutParams(lp);
+    tv.setTag(tag);
+    tv.setOnClickListener(new View.OnClickListener() {
+        public void onClick(View v) {
+            tap((String) v.getTag());
+        }
+    });
+    View box = activity.findViewById(boxId);
+    if (box instanceof LinearLayout) ((LinearLayout) box).addView(tv);
+}
+
+// 页面标题：固定到顶部圆边
+public void topTitle(int id) {
+    FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(dp(110), -2);
+    lp.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
+    lp.topMargin = dp(6);
+    View v = activity.findViewById(id);
+    if (v != null) v.setLayoutParams(lp);
+}
+
+public void clear(int boxId) {
+    View box = activity.findViewById(boxId);
+    if (box instanceof LinearLayout) ((LinearLayout) box).removeAllViews();
+}
+
+public String json(HashMap item) {
+    try {
+        JSONObject o = new JSONObject();
+        String[] ks = {"key", "type", "title", "author", "summary", "cover", "surl",
+                       "bookNum", "newbook", "magazineId", "issueNum", "issueLabel"};
+        for (int k = 0; k < ks.length; k++) {
+            Object v = item.get(ks[k]);
+            if (v != null) o.put(ks[k], String.valueOf(v));
+        }
+        return o.toString();
+    } catch (Throwable t) {
+        return null;
+    }
+}
+
+public int toInt(Object o, int def) {
+    if (o == null) return def;
+    if (o instanceof Number) return ((Number) o).intValue();
+    try {
+        return Integer.parseInt(String.valueOf(o));
+    } catch (Throwable t) {
+        return def;
+    }
+}
+
+public void tap(String tag) {
+    if (tag == null) return;
+    Log.i("qjwatch", "tap " + tag);
+    if (tag.startsWith("cats:")) {
+        i.sss("wv.kind", tag.substring(5));
+        i.uigo("cats.iyu");
+    } else if (tag.startsWith("list:")) {
+        String rest = tag.substring(5);
+        int p = rest.indexOf(':');
+        if (p > 0) {
+            i.sss("wv.cat", rest.substring(0, p));
+            i.sss("wv.catname", rest.substring(p + 1));
+        } else {
+            i.sss("wv.cat", rest);
+            i.sss("wv.catname", "");
+        }
+        i.uigo("list.iyu");
+    } else if (tag.startsWith("detail:")) {
+        i.sss("qj.item", tag.substring(7));
+        i.uigo("detail.iyu");
+    } else if (tag.startsWith("issues:")) {
+        i.sss("qj.item", tag.substring(7));
+        i.uigo("issues.iyu");
+    } else if (tag.startsWith("read:")) {
+        i.sss("qj.item", tag.substring(5));
+        i.sss("qj.page", "1");
+        i.uigo("reader.iyu");
+    } else if (tag.startsWith("resume:")) {
+        String js = tag.substring(7);
+        i.sss("qj.item", js);
+        int pg = 1;
+        try {
+            pg = new JSONObject(js).optInt("page", 1);
+        } catch (Throwable t) {
+        }
+        i.sss("qj.page", String.valueOf(pg));
+        i.uigo("reader.iyu");
+    } else if (tag.startsWith("toc:")) {
+        i.sss("qw.goto", tag.substring(4));
+        i.sss("qw.menuclose", "1");
+        activity.finish();
+    } else if (tag.startsWith("menu:")) {
+        i.uigo("menu.iyu");
+    } else if (tag.startsWith("tocpage")) {
+        i.uigo("toc.iyu");
+    }
+}

@@ -1,0 +1,52 @@
+// 期刊期次列表
+import android.util.Log;
+import org.json.JSONObject;
+
+public void boot() {
+    i.fn("qj_core");
+    i.fn("watch_ui");
+    i.fn("watch_nav");
+    place(2);
+    topTitle(4);
+    pad(3, 2, 2, 2, 2);
+    String itemJson = (String) i.sss("qj.item");
+    int magId = 0;
+    String magTitle = "期次";
+    try {
+        JSONObject o = new JSONObject(itemJson);
+        magId = toInt(o.optString("magazineId"), 0);
+        magTitle = o.optString("title", "期次");
+    } catch (Throwable t) {
+    }
+    title(4, "期次");   // 固定短标题
+    new Thread(new Runnable() {
+        public void run() {
+            i.fn("qj_core");
+            ArrayList list = core_issues(magId);
+            activity.runOnUiThread(new Runnable() {
+                public void run() {
+                    render(list);
+                }
+            });
+        }
+    }).start();
+}
+
+public void render(ArrayList list) {
+    i.fn("watch_ui");
+    i.fn("watch_nav");
+    clear(5);
+    if (list == null || list.size() == 0) {
+        row(5, "没有期次", "", "noop");
+        bindAll(1);
+        return;
+    }
+    for (int k = 0; k < list.size(); k++) {
+        HashMap item = (HashMap) list.get(k);
+        String label = s(item.get("issueLabel"));
+        String name = s(item.get("title"));
+        if (label.length() == 0) label = name;
+        rowSz(5, label, name, "read:" + json(item), 12);
+    }
+    bindAll(1);
+}

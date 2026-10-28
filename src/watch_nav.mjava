@@ -1,0 +1,52 @@
+// 非阅读页：横向滑动返回上一页（系统手势对第三方应用不生效）
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+
+public void bind(View v) {
+    if (v == null) return;
+    v.setOnTouchListener(new View.OnTouchListener() {
+        public boolean onTouch(View view, MotionEvent e) {
+            if (e.getAction() == MotionEvent.ACTION_DOWN) {
+                if (view.hasOnClickListeners()) view.setAlpha(0.55f);
+                i.sss("nv.x", Float.valueOf(e.getRawX()));
+                i.sss("nv.y", Float.valueOf(e.getRawY()));
+                i.sss("nv.done", "0");
+                return false;
+            }
+            if (e.getAction() == MotionEvent.ACTION_UP || e.getAction() == MotionEvent.ACTION_CANCEL) {
+                view.setAlpha(1.0f);
+            }
+            Object ox = i.sss("nv.x");
+            Object oy = i.sss("nv.y");
+            if (ox == null || oy == null) return false;
+            float dx = Math.abs(e.getRawX() - ((Number) ox).floatValue());
+            float dy = Math.abs(e.getRawY() - ((Number) oy).floatValue());
+            if ("0".equals(i.sss("nv.done")) && dx > 90 && dx > dy * 1.5) {
+                i.sss("nv.done", "1");
+                activity.finish();
+                return true;
+            }
+            return false;
+        }
+    });
+}
+
+public void bindAll(int rootId) {
+    View root = activity.findViewById(rootId);
+    if (root != null) {
+        root.setClickable(true);   // 不设的话 DOWN 不被消费，MOVE/UP 收不到
+    }
+    deep(root, 0);
+}
+
+public void deep(View v, int depth) {
+    if (v == null || depth > 8) return;
+    bind(v);
+    if (v instanceof ViewGroup) {
+        ViewGroup g = (ViewGroup) v;
+        for (int k = 0; k < g.getChildCount(); k++) {
+            deep(g.getChildAt(k), depth + 1);
+        }
+    }
+}
